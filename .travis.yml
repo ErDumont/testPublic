@@ -1,0 +1,37 @@
+language: cpp
+
+env:
+  global:
+    # Ubuntu version
+    - LINUX_DIST=xenial
+    - DEPS_DIR=${TRAVIS_BUILD_DIR}/deps
+    # Global build options and C++ flags
+    - CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow"
+    # Misc
+    ##- RUN_TESTS=true
+    ##- COVERAGE=false
+
+matrix:
+  include:
+    - os: windows
+
+    - os: linux
+      dist: xenial
+      sudo: true
+      compiler: gcc
+    
+script:
+    ############################################################################
+    # Build main and tests
+    ############################################################################
+     - git clone https://github.com/ErDumont/testProg.git
+     - cd testProg
+     - mkdir build
+     - cd build
+     - cmake ../src
+     - cmake --build . --config Release
+     - ctest -C Release -V
+
+
+##after_success:
+##    - ./build/testProg aa
